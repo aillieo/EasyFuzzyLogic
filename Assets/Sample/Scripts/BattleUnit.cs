@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using AillieoUtils.EasyFuzzyLogic;
@@ -7,8 +8,8 @@ namespace Sample
 {
     public class BattleUnit : MonoBehaviour
     {
-        public int hp;
-        public int hpMax;
+        public int hp = 100;
+        public int hpMax = 100;
 
         public int mp;
         public int mpMax;
@@ -16,11 +17,14 @@ namespace Sample
         public int dpa;
         public int heal;
 
+        [NonSerialized]
         public FuzzyLogicSystem fuzzyLogicSystem;
 
         public void OnTick()
         {
-            UnityEngine.Debug.Log(fuzzyLogicSystem.Infer(new CrispValue()));
+            hp -= 1;
+            hp = Mathf.Clamp(hp, 0, hpMax);
+            UnityEngine.Debug.Log(fuzzyLogicSystem.Infer(new CrispValue(){name = "hp", value = hp * 100f / hpMax}));
         }
     }
 }

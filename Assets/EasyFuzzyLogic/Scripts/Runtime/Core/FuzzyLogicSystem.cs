@@ -6,7 +6,7 @@ using UnityEngine;
 namespace AillieoUtils.EasyFuzzyLogic
 {
     [Serializable]
-    public class FuzzyLogicSystem
+    public class FuzzyLogicSystem : ISerializationCallbackReceiver
     {
         [SerializeField]
         private Dictionary<string, Dictionary<string, IMembershipFunction>> membershipFunctions;
@@ -15,8 +15,10 @@ namespace AillieoUtils.EasyFuzzyLogic
         [SerializeField]
         private IDifuzzificater difuzzificater;
 
-        private readonly Dictionary<string, Dictionary<string, FuzzyValue>> fuzzyCache = new Dictionary<string, Dictionary<string, FuzzyValue>>();
-        private readonly List<FuzzyValue> resultCache = new List<FuzzyValue>();
+        [NonSerialized]
+        private Dictionary<string, IDictionary<string, FuzzyValue>> fuzzyCache = new Dictionary<string, IDictionary<string, FuzzyValue>>();
+        [NonSerialized]
+        private List<FuzzyValue> resultCache = new List<FuzzyValue>();
 
         internal FuzzyLogicSystem(Dictionary<string, Dictionary<string, IMembershipFunction>> membershipFunctions, List<Rule> rules, IDifuzzificater difuzzificater)
         {
@@ -49,7 +51,7 @@ namespace AillieoUtils.EasyFuzzyLogic
                     foreach (var pair in membershipFuncs)
                     {
                         string linguisticValue = pair.Key;
-                        Dictionary<string, FuzzyValue> innerCache = default;
+                        IDictionary<string, FuzzyValue> innerCache = default;
                         if (!fuzzyCache.TryGetValue(variableName, out innerCache))
                         {
                             innerCache = new Dictionary<string, FuzzyValue>();
@@ -85,6 +87,23 @@ namespace AillieoUtils.EasyFuzzyLogic
             else
             {
                 throw new Exception($"no membership for {outVariableName}");
+            }
+        }
+
+        public void OnBeforeSerialize()
+        {
+        }
+
+        public void OnAfterDeserialize()
+        {
+            if (fuzzyCache == null)
+            {
+                fuzzyCache = new Dictionary<string, IDictionary<string, FuzzyValue>>();
+            }
+
+            if (resultCache == null)
+            {
+                resultCache = new List<FuzzyValue>();
             }
         }
     }

@@ -17,9 +17,21 @@ namespace AillieoUtils.EasyFuzzyLogic
             this.conclusion = conclusion;
         }
 
-        public bool Apply(IDictionary<string, Dictionary<string, FuzzyValue>> input, out FuzzyValue output)
+        public bool Apply(IDictionary<string, IDictionary<string, FuzzyValue>> input, out FuzzyValue output)
         {
-            throw new NotImplementedException();
+            output = new FuzzyValue()
+            {
+                name = conclusion.variableName,
+            };
+
+            if (premise.IsTrueFor(input))
+            {
+                output.linguisticVariable = conclusion.linguisticVar;
+                output.degreeOfMembership = default;
+                return true;
+            }
+
+            return false;
         }
     }
 }

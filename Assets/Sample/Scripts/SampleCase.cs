@@ -22,11 +22,19 @@ namespace Sample
                 .AddLinguisticVariable(
                     "hp",
                     ("high", new MFTriangle(0.5f, 1, new Vector2(1, 1))),
-                    ("mid", new MFTriangle(0.33f, 0.67f, new Vector2(0.5f, 1))),
+                    ("mid", new MFTriangle(0, 1, new Vector2(0.5f, 1))),
                     ("low", new MFTriangle(0, 0.5f, new Vector2(0, 1))))
-                .AddRule(new Premise("hp", "high"), new Conclusion("state", "attack"))
-                .AddRule(new Premise("hp", "low"), new Conclusion("stage", "defence"))
+                .AddLinguisticVariable(
+                    "aggressiveness",
+                    ("high", new MFTriangle(0, 1, new Vector2(1, 1))),
+                    ("low", new MFTriangle(0, 1, new Vector2(0, 1))))
+                .AddRule(new Premise("hp", "high"), new Conclusion("aggressiveness", "high"))
+                .AddRule(new Premise("hp", "low"), new Conclusion("aggressiveness", "low"))
                 .Build();
+
+
+            // 序列化暂未完成
+            fuzzyLogicSystem0 = fuzzyLogicSystem1;
 
             battleUnit0.fuzzyLogicSystem = fuzzyLogicSystem0;
             battleUnit1.fuzzyLogicSystem = fuzzyLogicSystem1;

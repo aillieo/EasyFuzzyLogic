@@ -6,5 +6,6 @@ namespace AillieoUtils.EasyFuzzyLogic
 {
     public interface IPremise
     {
+        bool IsTrueFor(IDictionary<string, IDictionary<string, FuzzyValue>> inputValues);
     }
 }

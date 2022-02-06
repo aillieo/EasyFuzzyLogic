@@ -18,5 +18,10 @@ namespace AillieoUtils.EasyFuzzyLogic
         {
             this.linguisticVariable = linguisticVariable;
         }
+
+        public bool IsTrueFor(IDictionary<string, IDictionary<string, FuzzyValue>> inputValues)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

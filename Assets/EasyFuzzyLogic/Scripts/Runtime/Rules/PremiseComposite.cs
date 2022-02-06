@@ -40,5 +40,10 @@ namespace AillieoUtils.EasyFuzzyLogic
         {
             return new PremiseComposite(Operator.Not, premise, default);
         }
+
+        public bool IsTrueFor(IDictionary<string, IDictionary<string, FuzzyValue>> inputValues)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
