@@ -19,9 +19,20 @@ namespace AillieoUtils.EasyFuzzyLogic
             this.linguisticVariable = linguisticVariable;
         }
 
-        public bool IsTrueFor(IDictionary<string, IDictionary<string, FuzzyValue>> inputValues)
+        public bool IsTrueFor(IDictionary<string, IDictionary<string, FuzzyValue>> inputValues, out float degreeOfMembership)
         {
-            throw new NotImplementedException();
+            if (inputValues.TryGetValue(linguisticVariable.name, out IDictionary<string, FuzzyValue> fuzzyValues))
+            {
+                if (fuzzyValues.TryGetValue(linguisticVariable.value, out FuzzyValue fuzzyValue))
+                {
+                    degreeOfMembership = fuzzyValue.degreeOfMembership;
+                    //return degreeOfMembership > 0;
+                    return true;
+                }
+            }
+
+            degreeOfMembership = 0;
+            return false;
         }
     }
 }

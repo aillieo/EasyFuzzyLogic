@@ -9,7 +9,7 @@ namespace AillieoUtils.EasyFuzzyLogic
     {
         private Dictionary<string, Dictionary<string, IMembershipFunction>> membershipFunctionsBuilder;
         private List<Rule> rulesBuilder;
-        private IDifuzzificater difuzzificaterBuilder;
+        private IDefuzzificater defuzzificaterBuilder;
 
         public FuzzyLogicSystemBuilder AddLinguisticVariable(string variableName, string fuzzyValue, IMembershipFunction membershipFunction)
         {
@@ -68,15 +68,15 @@ namespace AillieoUtils.EasyFuzzyLogic
             return this;
         }
 
-        public FuzzyLogicSystemBuilder SetDifuzzificater(IDifuzzificater difuzzificater)
+        public FuzzyLogicSystemBuilder SetDefuzzificater(IDefuzzificater defuzzificater)
         {
-            this.difuzzificaterBuilder = difuzzificater;
+            this.defuzzificaterBuilder = defuzzificater;
             return this;
         }
 
         public FuzzyLogicSystem Build()
         {
-            return new FuzzyLogicSystem(membershipFunctionsBuilder, rulesBuilder, difuzzificaterBuilder);
+            return new FuzzyLogicSystem(membershipFunctionsBuilder, rulesBuilder, defuzzificaterBuilder);
         }
     }
 }

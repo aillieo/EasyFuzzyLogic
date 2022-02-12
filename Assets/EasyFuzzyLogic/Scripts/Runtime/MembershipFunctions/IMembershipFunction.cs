@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace AillieoUtils.EasyFuzzyLogic
 {
@@ -9,5 +10,7 @@ namespace AillieoUtils.EasyFuzzyLogic
         float Fuzzify(float value);
         float LowerBound { get; }
         float UpperBound { get; }
+        float Area { get; }
+        Vector2 Centroid { get; }
     }
 }

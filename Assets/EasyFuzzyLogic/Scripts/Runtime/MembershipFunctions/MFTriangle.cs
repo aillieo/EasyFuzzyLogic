@@ -8,14 +8,10 @@ namespace AillieoUtils.EasyFuzzyLogic
     [Serializable]
     public class MFTriangle : IMembershipFunction
     {
-        [field: SerializeField]
-        public float lowerBound { get; private set; }
-        [field: SerializeField]
-        public float upperBound { get; private set; }
-        [field: SerializeField]
-        public float topX { get; private set; }
-        [field: SerializeField]
-        public float topY { get; private set; }
+        private float lowerBound;
+        private float upperBound;
+        private float topX;
+        private float topY;
 
         public MFTriangle(float lowerBound, float upperBound, Vector2 top)
         {
@@ -50,5 +46,9 @@ namespace AillieoUtils.EasyFuzzyLogic
                 return Mathf.Lerp(topY, 0, (value - topX) / (upperBound - topX));
             }
         }
+
+        public float Area => 0.5f * topY * (upperBound - lowerBound);
+
+        public Vector2 Centroid => new Vector2((lowerBound + upperBound + topX) / 3f, topY / 3f);
     }
 }

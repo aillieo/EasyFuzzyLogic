@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace AillieoUtils.EasyFuzzyLogic
 {
@@ -41,9 +42,44 @@ namespace AillieoUtils.EasyFuzzyLogic
             return new PremiseComposite(Operator.Not, premise, default);
         }
 
-        public bool IsTrueFor(IDictionary<string, IDictionary<string, FuzzyValue>> inputValues)
+        public bool IsTrueFor(IDictionary<string, IDictionary<string, FuzzyValue>> inputValues, out float degreeOfMembership)
         {
-            throw new NotImplementedException();
+            switch (op)
+            {
+                case Operator.And:
+                    {
+                        bool trueFor0 = premise0.IsTrueFor(inputValues, out float dom0);
+                        bool trueFor1 = premise1.IsTrueFor(inputValues, out float dom1);
+                        degreeOfMembership = Mathf.Min(dom0, dom1);
+                        return trueFor0 && trueFor1;
+                    }
+
+                case Operator.Or:
+                    {
+                        bool trueFor0 = premise0.IsTrueFor(inputValues, out float dom0);
+                        bool trueFor1 = premise1.IsTrueFor(inputValues, out float dom1);
+                        degreeOfMembership = Mathf.Max(dom0, dom1);
+                        return trueFor0 || trueFor1;
+                    }
+
+                case Operator.Not:
+                    {
+                        bool trueFor0 = premise0.IsTrueFor(inputValues, out float dom0);
+                        if (trueFor0)
+                        {
+                            degreeOfMembership = 1 - dom0;
+                        }
+                        else
+                        {
+                            degreeOfMembership = 0;
+                        }
+
+                        return trueFor0;
+                    }
+
+                default:
+                    throw new NotImplementedException();
+            }
         }
     }
 }

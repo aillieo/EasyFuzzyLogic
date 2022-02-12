@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace AillieoUtils.EasyFuzzyLogic
 {
-    public interface IDifuzzificater
+    public interface IDefuzzificater
     {
         float Defuzzify(List<FuzzyValue> fuzzyValues, Dictionary<string, IMembershipFunction> membershipFuncs);
     }

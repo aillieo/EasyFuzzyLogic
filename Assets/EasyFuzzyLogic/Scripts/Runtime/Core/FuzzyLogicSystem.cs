@@ -13,18 +13,18 @@ namespace AillieoUtils.EasyFuzzyLogic
         [SerializeField]
         private List<Rule> rules;
         [SerializeField]
-        private IDifuzzificater difuzzificater;
+        private IDefuzzificater defuzzificater;
 
         [NonSerialized]
         private Dictionary<string, IDictionary<string, FuzzyValue>> fuzzyCache = new Dictionary<string, IDictionary<string, FuzzyValue>>();
         [NonSerialized]
         private List<FuzzyValue> resultCache = new List<FuzzyValue>();
 
-        internal FuzzyLogicSystem(Dictionary<string, Dictionary<string, IMembershipFunction>> membershipFunctions, List<Rule> rules, IDifuzzificater difuzzificater)
+        internal FuzzyLogicSystem(Dictionary<string, Dictionary<string, IMembershipFunction>> membershipFunctions, List<Rule> rules, IDefuzzificater defuzzificater)
         {
             this.membershipFunctions = membershipFunctions;
             this.rules = rules;
-            this.difuzzificater = difuzzificater;
+            this.defuzzificater = defuzzificater;
         }
 
         public CrispValue Infer(params CrispValue[] inputVariables)
@@ -69,19 +69,28 @@ namespace AillieoUtils.EasyFuzzyLogic
             }
 
             // infer
-            string outVariableName = "outVariableName";
+            string outVariableName = null;
             foreach (var r in rules)
             {
                 if (r.Apply(fuzzyCache, out FuzzyValue output))
                 {
                     resultCache.Add(output);
+                    if (string.IsNullOrEmpty(outVariableName))
+                    {
+                        outVariableName = output.name;
+                    }
                 }
             }
 
-            // defuzzify
-            if (membershipFunctions.TryGetValue(outVariableName, out Dictionary<string, IMembershipFunction> membershipFuncsDifuzz))
+            if (string.IsNullOrEmpty(outVariableName))
             {
-                float outCrispValue = difuzzificater.Defuzzify(resultCache, membershipFuncsDifuzz);
+                throw new Exception("no matching rules for input");
+            }
+
+            // defuzzify
+            if (membershipFunctions.TryGetValue(outVariableName, out Dictionary<string, IMembershipFunction> membershipFuncsDefuzz))
+            {
+                float outCrispValue = defuzzificater.Defuzzify(resultCache, membershipFuncsDefuzz);
                 return new CrispValue(outVariableName, outCrispValue);
             }
             else

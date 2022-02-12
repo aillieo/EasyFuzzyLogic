@@ -28,10 +28,10 @@ namespace Sample
                     "aggressiveness",
                     ("high", new MFTriangle(0, 1, new Vector2(1, 1))),
                     ("low", new MFTriangle(0, 1, new Vector2(0, 1))))
-                .AddRule(new Premise("hp", "high"), new Conclusion("aggressiveness", "high"))
+                .AddRule(PremiseComposite.Or(new Premise("hp", "high"), new Premise("hp", "mid")), new Conclusion("aggressiveness", "high"))
                 .AddRule(new Premise("hp", "low"), new Conclusion("aggressiveness", "low"))
+                .SetDefuzzificater(new DefuzzCenterOfGravity())
                 .Build();
-
 
             // 序列化暂未完成
             fuzzyLogicSystem0 = fuzzyLogicSystem1;

@@ -24,10 +24,10 @@ namespace AillieoUtils.EasyFuzzyLogic
                 name = conclusion.variableName,
             };
 
-            if (premise.IsTrueFor(input))
+            if (premise.IsTrueFor(input, out float degreeOfMembership))
             {
                 output.linguisticVariable = conclusion.linguisticVar;
-                output.degreeOfMembership = default;
+                output.degreeOfMembership = degreeOfMembership;
                 return true;
             }
 
